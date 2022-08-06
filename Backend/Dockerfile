@@ -1,10 +1,19 @@
-FROM node:14.14.0-alpine
+FROM node:14-alpine
+
+ENV NODE_ENV production
+
 RUN mkdir -p /app
+
 WORKDIR /app
+
 COPY package.json /app
-COPY .env.example .env
+COPY yarn.lock /app
+
+RUN npm install -g npm@8.16.0
+RUN npm install --only=production
+
 COPY . /app
-RUN npm install
-CMD ["npm", "run", "start"]
 
 EXPOSE 3500
+
+CMD ["node", "app.js"]
