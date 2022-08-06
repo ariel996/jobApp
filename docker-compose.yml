@@ -16,6 +16,17 @@ services:
     volumes:
       - ./db/database.sql:/docker-entrypoint-intidb.d/database.sql
 
+  nginx:
+    build:
+      context: ./nginx
+    container_name: nginx_container
+    restart: always
+    depends_on:
+      - server
+      - client
+    ports:
+    - 3050:80
+
   server:
     build:
       context: ./Backend
@@ -32,6 +43,7 @@ services:
     command: npm start
 
   client:
+    stdin_open: true
     build:
       context: ./Frontend
     container_name: client_container
